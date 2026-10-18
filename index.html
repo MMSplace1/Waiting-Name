@@ -62,6 +62,8 @@ main{max-width:850px;margin:auto;padding:15px}
 #effects{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:1100}
 .petal{position:absolute;top:-25px;width:13px;height:19px;border-radius:80% 10% 80% 10%;background:#d7ad52;opacity:.75;animation:fall 7s linear infinite}
 @keyframes fall{to{transform:translateY(110vh) rotate(650deg)}}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:1200;background:#194b3b;color:#fff;padding:11px 18px;border-radius:25px;font-size:14px;max-width:90%;text-align:center;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}.toast.show{opacity:1;visibility:visible}
+.guest-mode .editor,.guest-mode #editToggle{display:none!important}
 footer{text-align:center;padding:22px;font-size:13px;color:#66583e}
 @media(max-width:520px){header{justify-content:center}header .actions{justify-content:center}.couple{gap:5px}.person{padding:9px}.amp{font-size:22px}.instruction{font-size:14px;padding:11px 14px;white-space:normal;width:max-content;max-width:90%;text-align:center}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
@@ -73,6 +75,7 @@ footer{text-align:center;padding:22px;font-size:13px;color:#66583e}
   <div class="actions">
     <button type="button" id="voiceTop">🔊 আমন্ত্রণ শুনুন</button>
     <button type="button" id="ghazalTop" class="dark">▶ গজল</button>
+    <button type="button" id="shareTop">📤 শেয়ার</button>
     <button type="button" id="editToggle">⚙ সম্পাদনা</button>
   </div>
 </header>
@@ -107,7 +110,7 @@ footer{text-align:center;padding:22px;font-size:13px;color:#66583e}
     <div class="dua" id="messageText">আপনাদের উপস্থিতি আমাদের আনন্দকে পূর্ণতা দেবে। নবদম্পতির জন্য দোয়া করবেন।</div>
     <div class="audio-panel">
       <h3>🎙️ কণ্ঠে আমন্ত্রণ</h3>
-      <p class="small">‘আমন্ত্রণ শুনুন’ চাপ দিলে পুরো কার্ডের লেখা পড়ে শোনানোর চেষ্টা করবে। আরও স্বাভাবিক, বলিষ্ঠ পুরুষ কণ্ঠের জন্য সম্পাদনা অংশে তৈরি করা MP3 ভয়েসের সরাসরি URL দিন।</p>
+      <p class="small">‘আমন্ত্রণ শুনুন’ চাপ দিলে পুরো কার্ডের লেখা পড়ে শোনানোর চেষ্টা করবে। আরও স্বাভাবিক কিশোর কণ্ঠের জন্য সম্পাদনা অংশে তৈরি করা MP3 ভয়েসের সরাসরি URL দিন।</p>
       <div class="audio-controls">
         <button type="button" id="voicePlay">🔊 আমন্ত্রণ শুনুন</button>
         <button type="button" id="voiceStop">■ ভয়েস বন্ধ</button>
@@ -145,14 +148,14 @@ footer{text-align:center;padding:22px;font-size:13px;color:#66583e}
     <div class="field">
       <label for="voiceTypeInput">ব্রাউজারের কণ্ঠের ধরন (MP3 না দিলে)</label>
       <select id="voiceTypeInput">
-        <option value="auto">স্বয়ংক্রিয় (সবচেয়ে মিষ্টি ও স্পষ্ট কণ্ঠ)</option>
-        <option value="male">তরুণ পুরুষ কণ্ঠ</option>
-        <option value="female">তরুণী কণ্ঠ</option>
+        <option value="auto">স্বয়ংক্রিয় (১২–১৮ বছরের কিশোর-কিশোরীর মতো কণ্ঠ)</option>
+        <option value="male">কিশোর কণ্ঠ (ছেলে)</option>
+        <option value="female">কিশোরী কণ্ঠ (মেয়ে)</option>
       </select>
       <div class="small">ফোন/ব্রাউজারে যে বাংলা কণ্ঠ আছে তার মধ্যে সেরাটি বেছে নেওয়া হবে।</div>
     </div>
     <div class="field">
-      <label for="voiceUrlInput">বলিষ্ঠ পুরুষ কণ্ঠের MP3-এর সরাসরি HTTPS URL (ঐচ্ছিক)</label>
+      <label for="voiceUrlInput">ভয়েসের MP3-এর সরাসরি HTTPS URL (ঐচ্ছিক)</label>
       <input id="voiceUrlInput" type="text" inputmode="url" placeholder="https://example.com/invitation-voice.mp3 অথবা invitation-voice.mp3">
       <div class="small">সরাসরি অডিও ফাইলের লিংক দিতে হবে; সাধারণ শেয়ার পেজের লিংক নয়। লিংকটি সবার জন্য উন্মুক্ত হতে হবে। ফাইলটি এই পেজের পাশেই আপলোড করা থাকলে শুধু ফাইলের নাম লিখলেও চলবে।</div>
     </div>
@@ -167,11 +170,12 @@ footer{text-align:center;padding:22px;font-size:13px;color:#66583e}
       <button type="button" id="testGhazal">গজল পরীক্ষা</button>
       <button type="button" id="closeEditor">বন্ধ করুন</button>
     </div>
-    <p class="small">নোট: ব্রাউজারের বাংলা Text-to-Speech কণ্ঠ ফোনভেদে আলাদা হতে পারে। নির্দিষ্ট পুরুষ কণ্ঠ পেতে আগে তৈরি করা MP3 URL ব্যবহার করুন।</p>
+    <p class="small">নোট: ব্রাউজারের বাংলা Text-to-Speech কণ্ঠ ফোনভেদে আলাদা হতে পারে। নির্দিষ্ট কিশোর কণ্ঠ পেতে আগে তৈরি করা MP3 URL ব্যবহার করুন।</p>
   </section>
 </main>
 <footer>আল্লাহ নবদম্পতির জীবনে বরকত দান করুন। আমিন।</footer>
 <div id="effects" aria-hidden="true"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 <audio id="voiceAudio" preload="none" playsinline></audio>
 <audio id="ghazalAudio" preload="none" playsinline loop></audio>
 
@@ -218,16 +222,17 @@ footer{text-align:center;padding:22px;font-size:13px;color:#66583e}
       return {
         ...defaults,
         groom: obj.groom || defaults.groom,
-        groomFather: obj.gfather || defaults.groomFather,
+        groomFather: typeof obj.gfather === "string" ? obj.gfather : defaults.groomFather,
         bride: obj.bride || defaults.bride,
-        brideFather: obj.bfather || defaults.brideFather,
+        brideFather: typeof obj.bfather === "string" ? obj.bfather : defaults.brideFather,
         guest: obj.guest || defaults.guest,
         date: obj.date || defaults.date,
         venue: obj.venue || defaults.venue,
         message: obj.message || defaults.message,
         ghazal: obj.music || "",
         voice: obj.voice || "",
-        event: obj.event || ""
+        event: obj.event || "",
+        voiceType: ["auto","male","female"].includes(obj.vtype) ? obj.vtype : "auto"
       };
     }
     try {
@@ -408,8 +413,8 @@ footer{text-align:center;padding:22px;font-size:13px;color:#66583e}
     const voice = pickVoice(list, kind);
     const chunks = splitChunks(fullInvitationText());
     // তরুণ, মিষ্টি ও স্পষ্ট শোনানোর জন্য স্বাভাবিকের কাছাকাছি গতি ও পিচ
-    const pitch = kind === "male" ? 1.0 : (kind === "female" ? 1.12 : 1.06);
-    const rate = 0.94;
+    const pitch = kind === "male" ? 1.2 : (kind === "female" ? 1.32 : 1.26);
+    const rate = 0.97;
     let i = 0;
     const next = () => {
       if (myId !== speakId) return;
@@ -444,6 +449,7 @@ footer{text-align:center;padding:22px;font-size:13px;color:#66583e}
     stopVoice(true);
     const res = resolveAudioUrl(data.ghazal);
     if (res.empty) {
+      if (hasInviteLink) { $("ghazalStatus").textContent = "এই কার্ডে গজল যুক্ত করা হয়নি।"; return; }
       $("ghazalStatus").textContent = "এখনো গজলের সরাসরি HTTPS অডিও URL দেওয়া হয়নি। ⚙ সম্পাদনা থেকে URL দিন।";
       $("editor").classList.add("show");
       $("editor").scrollIntoView({behavior:"smooth", block:"start"});
@@ -496,6 +502,7 @@ footer{text-align:center;padding:22px;font-size:13px;color:#66583e}
   }
 
   function toggleEditor(force) {
+    if (hasInviteLink) return;
     const el = $("editor");
     const show = typeof force === "boolean" ? force : !el.classList.contains("show");
     el.classList.toggle("show", show);
@@ -571,9 +578,50 @@ footer{text-align:center;padding:22px;font-size:13px;color:#66583e}
     }, 2600);
   }
 
+  /* ---------- শেয়ার ---------- */
+  let toastTimer = null;
+  function toast(msg) {
+    const t = $("toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove("show"), 4000);
+  }
+  function buildShareLink() {
+    const obj = {
+      groom:data.groom, gfather:data.groomFather, bride:data.bride, bfather:data.brideFather,
+      guest:data.guest, date:data.date, venue:data.venue, message:data.message,
+      music:data.ghazal, voice:data.voice, event:data.event, vtype:data.voiceType
+    };
+    Object.keys(obj).forEach(k => { if (!obj[k] && k !== "gfather" && k !== "bfather") delete obj[k]; });
+    const bytes = new TextEncoder().encode(JSON.stringify(obj));
+    let bin = "";
+    bytes.forEach(b => { bin += String.fromCharCode(b); });
+    const b64 = btoa(bin).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+    return location.href.split("#")[0] + "#invite=" + b64;
+  }
+  async function shareCard() {
+    if (!hasInviteLink) applySettings();
+    const url = buildShareLink();
+    const title = "বিয়ের আমন্ত্রণ: " + data.groom + " ও " + data.bride;
+    const text = title + (data.date && data.date !== defaults.date ? "\n" + data.date : "") + "\nআমন্ত্রণপত্র দেখতে লিংকে চাপ দিন:";
+    if (location.protocol === "file:") toast("সতর্কতা: পেজটি আগে ওয়েবসাইটে আপলোড করুন, নইলে লিংক অন্যের ফোনে খুলবে না।");
+    if (navigator.share) {
+      try { await navigator.share({title, text, url}); return; }
+      catch (e) { if (e && e.name === "AbortError") return; }
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+      toast("লিংক কপি হয়েছে। এখন অতিথিকে পাঠাতে পারেন।");
+      return;
+    } catch (_) {}
+    window.prompt("লিংকটি কপি করে অতিথিকে পাঠান:", url);
+  }
+
   /* ---------- শুরু ---------- */
   function init() {
     data = loadData();
+    document.body.classList.toggle("guest-mode", hasInviteLink);
     render();
     setupCountdown();
     document.body.style.overflow = "hidden";
@@ -590,6 +638,7 @@ footer{text-align:center;padding:22px;font-size:13px;color:#66583e}
     $("ghazalTop").addEventListener("click", playGhazal);
     $("ghazalPlay").addEventListener("click", playGhazal);
     $("ghazalStop").addEventListener("click", () => stopGhazal());
+    $("shareTop").addEventListener("click", shareCard);
     $("editToggle").addEventListener("click", () => toggleEditor());
     $("closeEditor").addEventListener("click", () => toggleEditor(false));
     $("applySettings").addEventListener("click", applySettings);
@@ -598,6 +647,7 @@ footer{text-align:center;padding:22px;font-size:13px;color:#66583e}
 
     window.addEventListener("hashchange", () => {
       data = loadData();
+      document.body.classList.toggle("guest-mode", hasInviteLink);
       render();
       setupCountdown();
     });
