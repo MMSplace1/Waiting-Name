@@ -1,0 +1,166 @@
+
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Royal Islamic Wedding Invitation</title>
+<style>
+:root {
+  --gold: #c49a43;
+  --green: #194b3b;
+}
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background: radial-gradient(circle, #fff6df, #c8ae78);
+  color: #3b301d;
+}
+button {
+  padding: 10px 16px;
+  border: 1px solid var(--gold);
+  border-radius: 25px;
+  background: #f8e5a9;
+  cursor: pointer;
+  font-weight: bold;
+}
+.card {
+  max-width: 750px;
+  margin: 20px auto;
+  padding: 25px;
+  text-align: center;
+  background: #fffaf0;
+  border: 3px double var(--gold);
+  border-radius: 15px;
+}
+h1, h2 { color: var(--green); }
+.audio-panel {
+  margin-top: 20px;
+  padding: 15px;
+  background: #f6edda;
+  border-radius: 12px;
+}
+</style>
+</head>
+<body>
+
+<section class="card">
+  <h1>بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</h1>
+  <h2>শুভ বিবাহ</h2>
+  <p id="invitationText">
+    সম্মানিত অতিথি, আমাদের শুভ বিবাহ অনুষ্ঠানে আপনাকে সাদর আমন্ত্রণ।
+    নবদম্পতির জন্য দোয়া করবেন।
+  </p>
+
+  <div class="audio-panel">
+    <h2>🎙️ কণ্ঠে আমন্ত্রণ</h2>
+    <button id="voiceButton">🔊 আমন্ত্রণ শুনুন</button>
+    <button id="voiceStop">■ ভয়েস বন্ধ</button>
+    <p id="voiceStatus"></p>
+  </div>
+
+  <div class="audio-panel">
+    <h2>🎵 গজল শুনুন</h2>
+    <button id="ghazalButton">▶ গজল চালু করুন</button>
+    <button id="ghazalStop">■ গজল বন্ধ</button>
+    <p id="ghazalStatus"></p>
+  </div>
+</section>
+
+<audio id="voiceAudio" preload="none"></audio>
+<audio id="ghazalAudio" preload="none" loop></audio>
+
+<script>
+const voiceAudio = document.getElementById("voiceAudio");
+const ghazalAudio = document.getElementById("ghazalAudio");
+const voiceStatus = document.getElementById("voiceStatus");
+const ghazalStatus = document.getElementById("ghazalStatus");
+
+// এখানে সরাসরি MP3 ফাইলের URL বসাও।
+const VOICE_URL = "";
+const GHAZAL_URL = "";
+
+function stopVoice() {
+  speechSynthesis.cancel();
+  voiceAudio.pause();
+  voiceAudio.currentTime = 0;
+}
+
+function stopGhazal() {
+  ghazalAudio.pause();
+  ghazalAudio.currentTime = 0;
+  document.getElementById("ghazalButton").textContent =
+    "▶ গজল চালু করুন";
+}
+
+document.getElementById("voiceButton").onclick = async () => {
+  stopGhazal();
+  stopVoice();
+
+  if (VOICE_URL.trim()) {
+    voiceAudio.src = VOICE_URL;
+    try {
+      await voiceAudio.play();
+      voiceStatus.textContent = "আমন্ত্রণ চলছে...";
+    } catch (e) {
+      voiceStatus.textContent =
+        "ভয়েস URL পরীক্ষা করুন।";
+    }
+    return;
+  }
+
+  if (!("speechSynthesis" in window)) {
+    voiceStatus.textContent =
+      "এই ব্রাউজারে Text-to-Speech নেই।";
+    return;
+  }
+
+  const text = document.getElementById("invitationText").innerText;
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = "bn-BD";
+  utterance.rate = 0.88;
+  utterance.pitch = 0.82;
+
+  utterance.onstart = () => {
+    voiceStatus.textContent = "আমন্ত্রণ পড়া হচ্ছে...";
+  };
+  utterance.onend = () => {
+    voiceStatus.textContent = "আমন্ত্রণ শেষ।";
+  };
+
+  speechSynthesis.speak(utterance);
+};
+
+document.getElementById("voiceStop").onclick = stopVoice;
+
+document.getElementById("ghazalButton").onclick = async () => {
+  stopVoice();
+
+  if (!GHAZAL_URL.trim()) {
+    ghazalStatus.textContent =
+      "কোডে GHAZAL_URL বসাতে হবে।";
+    return;
+  }
+
+  if (!ghazalAudio.paused) {
+    stopGhazal();
+    return;
+  }
+
+  ghazalAudio.src = GHAZAL_URL;
+  try {
+    await ghazalAudio.play();
+    ghazalStatus.textContent = "গজল চলছে...";
+    document.getElementById("ghazalButton").textContent =
+      "Ⅱ গজল থামান";
+  } catch (e) {
+    ghazalStatus.textContent =
+      "গজল চালু হয়নি। সরাসরি MP3 URL পরীক্ষা করুন।";
+  }
+};
+
+document.getElementById("ghazalStop").onclick = stopGhazal;
+</script>
+
+</body>
+</html>
