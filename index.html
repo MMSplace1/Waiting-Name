@@ -63,7 +63,19 @@ main{max-width:850px;margin:auto;padding:15px}
 .petal{position:absolute;top:-25px;width:13px;height:19px;border-radius:80% 10% 80% 10%;background:#d7ad52;opacity:.75;animation:fall 7s linear infinite}
 @keyframes fall{to{transform:translateY(110vh) rotate(650deg)}}
 .toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:1200;background:#194b3b;color:#fff;padding:11px 18px;border-radius:25px;font-size:14px;max-width:90%;text-align:center;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}.toast.show{opacity:1;visibility:visible}
-.guest-mode .editor,.guest-mode #editToggle{display:none!important}
+#editToggle,#adminLogout{display:none}
+body.admin-mode #editToggle,body.admin-mode #adminLogout{display:inline-block}
+body:not(.admin-mode) .editor{display:none!important}
+.admin-entry{margin-top:8px}
+.admin-entry button{background:none;border:none;color:#8a7a58;font-size:12px;font-weight:400;padding:4px 8px;text-decoration:underline}
+.guest-mode .admin-entry{display:none!important}
+.modal{position:fixed;inset:0;z-index:1300;background:#000a;display:none;align-items:center;justify-content:center;padding:16px}
+.modal.show{display:flex}
+.modal-box{background:#fffaf0;border:3px double var(--gold);border-radius:14px;padding:20px;width:100%;max-width:340px;text-align:center}
+.modal-box h3{margin:0 0 6px;color:var(--green)}
+.modal-box input{width:100%;padding:11px;border:1px solid #c9ad6c;border-radius:8px;margin:8px 0;background:#fff}
+.modal-box .row{display:flex;gap:8px;justify-content:center;margin-top:6px}
+.modal-msg{font-size:13px;min-height:1.4em;color:#9a2a18}
 footer{text-align:center;padding:22px;font-size:13px;color:#66583e}
 @media(max-width:520px){header{justify-content:center}header .actions{justify-content:center}.couple{gap:5px}.person{padding:9px}.amp{font-size:22px}.instruction{font-size:14px;padding:11px 14px;white-space:normal;width:max-content;max-width:90%;text-align:center}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
@@ -77,6 +89,7 @@ footer{text-align:center;padding:22px;font-size:13px;color:#66583e}
     <button type="button" id="ghazalTop" class="dark">▶ গজল</button>
     <button type="button" id="shareTop">📤 শেয়ার</button>
     <button type="button" id="editToggle">⚙ সম্পাদনা</button>
+    <button type="button" id="adminLogout">🚪 অ্যাডমিন লগআউট</button>
   </div>
 </header>
 
@@ -126,6 +139,13 @@ footer{text-align:center;padding:22px;font-size:13px;color:#66583e}
       </div>
       <div class="status" id="ghazalStatus" role="status"></div>
     </div>
+    <div class="audio-panel">
+      <h3>📤 আত্মীয়-প্রতিবেশীদের পাঠান</h3>
+      <p class="small">এই আমন্ত্রণপত্রটি আপনার প্রতিবেশী ও আত্মীয়দের কাছে শেয়ার করতে নিচের বাটনে চাপ দিন।</p>
+      <div class="audio-controls">
+        <button type="button" id="shareCard" class="dark">📤 শেয়ার করুন</button>
+      </div>
+    </div>
   </section>
 
   <section class="editor" id="editor">
@@ -148,9 +168,7 @@ footer{text-align:center;padding:22px;font-size:13px;color:#66583e}
     <div class="field">
       <label for="voiceTypeInput">ব্রাউজারের কণ্ঠের ধরন (MP3 না দিলে)</label>
       <select id="voiceTypeInput">
-        <option value="auto">স্বয়ংক্রিয় (১২–১৮ বছরের কিশোর-কিশোরীর মতো কণ্ঠ)</option>
-        <option value="male">কিশোর কণ্ঠ (ছেলে)</option>
-        <option value="female">কিশোরী কণ্ঠ (মেয়ে)</option>
+        <option value="male">১২–১৮ বছরের কিশোর ছেলের কণ্ঠ</option>
       </select>
       <div class="small">ফোন/ব্রাউজারে যে বাংলা কণ্ঠ আছে তার মধ্যে সেরাটি বেছে নেওয়া হবে।</div>
     </div>
@@ -173,9 +191,21 @@ footer{text-align:center;padding:22px;font-size:13px;color:#66583e}
     <p class="small">নোট: ব্রাউজারের বাংলা Text-to-Speech কণ্ঠ ফোনভেদে আলাদা হতে পারে। নির্দিষ্ট কিশোর কণ্ঠ পেতে আগে তৈরি করা MP3 URL ব্যবহার করুন।</p>
   </section>
 </main>
-<footer>আল্লাহ নবদম্পতির জীবনে বরকত দান করুন। আমিন।</footer>
+<footer>আল্লাহ নবদম্পতির জীবনে বরকত দান করুন। আমিন।
+  <div class="admin-entry"><button type="button" id="adminEntry">🔒 অ্যাডমিন</button></div>
+</footer>
 <div id="effects" aria-hidden="true"></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="modal" id="adminModal" role="dialog" aria-modal="true" aria-labelledby="adminTitle">
+  <div class="modal-box">
+    <h3 id="adminTitle">অ্যাডমিন প্রবেশ</h3>
+    <p class="small" id="adminHint"></p>
+    <input type="password" id="adminPass" autocomplete="off" placeholder="পাসওয়ার্ড">
+    <input type="password" id="adminPass2" autocomplete="off" placeholder="পাসওয়ার্ড আবার লিখুন" style="display:none">
+    <div class="modal-msg" id="adminMsg" role="alert"></div>
+    <div class="row"><button type="button" id="adminOk" class="dark">প্রবেশ করুন</button><button type="button" id="adminCancel">বাতিল</button></div>
+  </div>
+</div>
 <audio id="voiceAudio" preload="none" playsinline></audio>
 <audio id="ghazalAudio" preload="none" playsinline loop></audio>
 
@@ -190,7 +220,7 @@ footer{text-align:center;padding:22px;font-size:13px;color:#66583e}
     guest:"সম্মানিত অতিথি, আপনাকে আমাদের শুভ বিবাহ অনুষ্ঠানে সাদর আমন্ত্রণ।",
     date:"তারিখ ও সময়", venue:"অনুষ্ঠানের স্থান",
     message:"আপনাদের উপস্থিতি আমাদের আনন্দকে পূর্ণতা দেবে। নবদম্পতির জন্য দোয়া করবেন।",
-    voice:"", ghazal:"", event:"", voiceType:"auto"
+    voice:"", ghazal:"", event:"", voiceType:"male"
   };
   let hasInviteLink = false;
   let data = {...defaults};
@@ -198,6 +228,17 @@ footer{text-align:center;padding:22px;font-size:13px;color:#66583e}
   let speakId = 0;
   let speaking = false;
   let petalTimer = null;
+  // ===== অ্যাডমিন: পাসওয়ার্ড দিয়ে প্রবেশ। শেয়ার করা (#invite=) লিংকে অ্যাডমিন সম্পূর্ণ বন্ধ থাকে =====
+  const PW_KEY = "royalAdminPw_v1";
+  const SESSION_KEY = "royalAdminOk_v1";
+  const hasInviteInUrl = () => /(?:^#|&)invite=/.test(location.hash || "");
+  let adminUnlocked = false;
+  try { adminUnlocked = sessionStorage.getItem(SESSION_KEY) === "1"; } catch (_) {}
+  const isOwner = () => adminUnlocked && !hasInviteInUrl();
+  function updateModeClasses() {
+    document.body.classList.toggle("admin-mode", isOwner());
+    document.body.classList.toggle("guest-mode", hasInviteInUrl());
+  }
 
   /* ---------- Invite link data (#invite=<base64 JSON>) : একবারই ডিকোড হয় ---------- */
   function readHash() {
@@ -232,7 +273,7 @@ footer{text-align:center;padding:22px;font-size:13px;color:#66583e}
         ghazal: obj.music || "",
         voice: obj.voice || "",
         event: obj.event || "",
-        voiceType: ["auto","male","female"].includes(obj.vtype) ? obj.vtype : "auto"
+        voiceType: "male"
       };
     }
     try {
@@ -247,7 +288,7 @@ footer{text-align:center;padding:22px;font-size:13px;color:#66583e}
   }
 
   function saveData() {
-    if (hasInviteLink) return; // শেয়ার করা লিংকের তথ্য কখনও ওভাররাইট হবে না
+    if (hasInviteLink || !isOwner()) return; // শেয়ার করা লিংকের তথ্য কখনও ওভাররাইট হবে না
     try { localStorage.setItem(STORE_KEY, JSON.stringify(data)); } catch (_) {}
   }
 
@@ -272,7 +313,7 @@ footer{text-align:center;padding:22px;font-size:13px;color:#66583e}
     $("messageInput").value = data.message;
     $("voiceUrlInput").value = data.voice || "";
     $("ghazalUrlInput").value = data.ghazal || "";
-    $("voiceTypeInput").value = data.voiceType || "auto";
+    $("voiceTypeInput").value = "male";
     const m = String(data.event || "").match(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/);
     $("eventInput").value = m ? m[0] : "";
   }
@@ -409,11 +450,13 @@ footer{text-align:center;padding:22px;font-size:13px;color:#66583e}
     $("voiceStatus").textContent = "কণ্ঠ প্রস্তুত হচ্ছে…";
     const list = await getVoicesReady();
     if (myId !== speakId) return;
-    const kind = data.voiceType || "auto";
+    const kind = "male";
     const voice = pickVoice(list, kind);
     const chunks = splitChunks(fullInvitationText());
     // তরুণ, মিষ্টি ও স্পষ্ট শোনানোর জন্য স্বাভাবিকের কাছাকাছি গতি ও পিচ
-    const pitch = kind === "male" ? 1.2 : (kind === "female" ? 1.32 : 1.26);
+    const isMaleVoice = !!voice && /pradeep|bashkar|bhaskar|\bmale\b|\bman\b/i.test(voice.name || "");
+    // ছেলের কণ্ঠ পাওয়া গেলে পিচ বাড়িয়ে কিশোর শোনানো হয়; না পাওয়া গেলে মেয়েলি শোনানো এড়াতে পিচ কমানো হয়
+    const pitch = isMaleVoice ? 1.22 : 0.85;
     const rate = 0.97;
     let i = 0;
     const next = () => {
@@ -440,7 +483,7 @@ footer{text-align:center;padding:22px;font-size:13px;color:#66583e}
     };
     speaking = true;
     $("voiceStatus").textContent = voice
-      ? "আমন্ত্রণ পড়া হচ্ছে… (" + voice.name + ")"
+      ? "আমন্ত্রণ পড়া হচ্ছে… (" + voice.name + ")" + (isMaleVoice ? "" : " — এই ডিভাইসে ছেলের কণ্ঠ নেই, কিশোর কণ্ঠের জন্য MP3 ভয়েস দিন।")
       : "ব্রাউজারের কণ্ঠে আমন্ত্রণ পড়া হচ্ছে… (এই ডিভাইসে বাংলা কণ্ঠ পাওয়া যায়নি, MP3 ভয়েস দিন)";
     setTimeout(next, 120);
   }
@@ -449,7 +492,7 @@ footer{text-align:center;padding:22px;font-size:13px;color:#66583e}
     stopVoice(true);
     const res = resolveAudioUrl(data.ghazal);
     if (res.empty) {
-      if (hasInviteLink) { $("ghazalStatus").textContent = "এই কার্ডে গজল যুক্ত করা হয়নি।"; return; }
+      if (!isOwner()) { $("ghazalStatus").textContent = "এই কার্ডে গজল যুক্ত করা হয়নি।"; return; }
       $("ghazalStatus").textContent = "এখনো গজলের সরাসরি HTTPS অডিও URL দেওয়া হয়নি। ⚙ সম্পাদনা থেকে URL দিন।";
       $("editor").classList.add("show");
       $("editor").scrollIntoView({behavior:"smooth", block:"start"});
@@ -482,6 +525,7 @@ footer{text-align:center;padding:22px;font-size:13px;color:#66583e}
 
   /* ---------- সেটিংস ---------- */
   function applySettings() {
+    if (!isOwner()) return;
     data.groom = $("groomInput").value.trim() || defaults.groom;
     data.groomFather = $("groomFatherInput").value.trim();
     data.bride = $("brideInput").value.trim() || defaults.bride;
@@ -491,7 +535,7 @@ footer{text-align:center;padding:22px;font-size:13px;color:#66583e}
     data.event = $("eventInput").value.trim();
     data.venue = $("venueInput").value.trim() || defaults.venue;
     data.message = $("messageInput").value.trim() || defaults.message;
-    data.voiceType = $("voiceTypeInput").value || "auto";
+    data.voiceType = "male";
     data.voice = $("voiceUrlInput").value.trim();
     data.ghazal = $("ghazalUrlInput").value.trim();
     render();
@@ -502,7 +546,7 @@ footer{text-align:center;padding:22px;font-size:13px;color:#66583e}
   }
 
   function toggleEditor(force) {
-    if (hasInviteLink) return;
+    if (!isOwner()) return;
     const el = $("editor");
     const show = typeof force === "boolean" ? force : !el.classList.contains("show");
     el.classList.toggle("show", show);
@@ -598,10 +642,13 @@ footer{text-align:center;padding:22px;font-size:13px;color:#66583e}
     let bin = "";
     bytes.forEach(b => { bin += String.fromCharCode(b); });
     const b64 = btoa(bin).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
-    return location.href.split("#")[0] + "#invite=" + b64;
+    const u = new URL(location.href);
+    u.hash = "";
+    u.searchParams.delete("admin");
+    return u.toString() + "#invite=" + b64;
   }
   async function shareCard() {
-    if (!hasInviteLink) applySettings();
+    if (isOwner()) applySettings();
     const url = buildShareLink();
     const title = "বিয়ের আমন্ত্রণ: " + data.groom + " ও " + data.bride;
     const text = title + (data.date && data.date !== defaults.date ? "\n" + data.date : "") + "\nআমন্ত্রণপত্র দেখতে লিংকে চাপ দিন:";
@@ -618,10 +665,69 @@ footer{text-align:center;padding:22px;font-size:13px;color:#66583e}
     window.prompt("লিংকটি কপি করে অতিথিকে পাঠান:", url);
   }
 
+  /* ---------- অ্যাডমিন লগইন ---------- */
+  async function hashPw(pw) {
+    const text = "royal-wedding|" + pw;
+    try {
+      if (window.crypto && crypto.subtle) {
+        const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
+        return "s:" + Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
+      }
+    } catch (_) {}
+    let h = 5381;
+    for (let i = 0; i < text.length; i++) h = ((h << 5) + h + text.charCodeAt(i)) | 0;
+    return "d:" + (h >>> 0).toString(16);
+  }
+  function storedPw() {
+    try { return localStorage.getItem(PW_KEY); } catch (_) { return null; }
+  }
+  function openAdminModal() {
+    if (hasInviteInUrl() || isOwner()) return;
+    const first = !storedPw();
+    $("adminTitle").textContent = first ? "অ্যাডমিন পাসওয়ার্ড তৈরি করুন" : "অ্যাডমিন প্রবেশ";
+    $("adminHint").textContent = first
+      ? "প্রথমবার: একটি পাসওয়ার্ড ঠিক করুন (কমপক্ষে ৪ অক্ষর)। এই পাসওয়ার্ড দিয়েই শুধু আপনি সম্পাদনা করতে পারবেন।"
+      : "সম্পাদনা করতে অ্যাডমিন পাসওয়ার্ড দিন।";
+    $("adminPass").value = "";
+    $("adminPass2").value = "";
+    $("adminPass2").style.display = first ? "block" : "none";
+    $("adminMsg").textContent = "";
+    $("adminOk").dataset.first = first ? "1" : "";
+    $("adminModal").classList.add("show");
+    setTimeout(() => $("adminPass").focus(), 50);
+  }
+  function closeAdminModal() { $("adminModal").classList.remove("show"); }
+  async function submitAdmin() {
+    const first = $("adminOk").dataset.first === "1";
+    const pw = $("adminPass").value;
+    const msg = $("adminMsg");
+    if (pw.length < 4) { msg.textContent = "পাসওয়ার্ড কমপক্ষে ৪ অক্ষরের হতে হবে।"; return; }
+    if (first) {
+      if (pw !== $("adminPass2").value) { msg.textContent = "দুই জায়গায় পাসওয়ার্ড মেলেনি।"; return; }
+      try { localStorage.setItem(PW_KEY, await hashPw(pw)); }
+      catch (_) { msg.textContent = "এই ব্রাউজারে পাসওয়ার্ড সংরক্ষণ করা যায়নি (প্রাইভেট মোড বন্ধ করুন)।"; return; }
+    } else {
+      const stored = storedPw();
+      if (!stored || stored !== await hashPw(pw)) { msg.textContent = "পাসওয়ার্ড ভুল হয়েছে।"; return; }
+    }
+    adminUnlocked = true;
+    try { sessionStorage.setItem(SESSION_KEY, "1"); } catch (_) {}
+    closeAdminModal();
+    updateModeClasses();
+    toast("অ্যাডমিন হিসেবে প্রবেশ করেছেন। উপরে ⚙ সম্পাদনা বাটন চালু হয়েছে।");
+  }
+  function adminLogout() {
+    adminUnlocked = false;
+    try { sessionStorage.removeItem(SESSION_KEY); } catch (_) {}
+    $("editor").classList.remove("show");
+    updateModeClasses();
+    toast("অ্যাডমিন থেকে বেরিয়ে এসেছেন।");
+  }
+
   /* ---------- শুরু ---------- */
   function init() {
     data = loadData();
-    document.body.classList.toggle("guest-mode", hasInviteLink);
+    updateModeClasses();
     render();
     setupCountdown();
     document.body.style.overflow = "hidden";
@@ -639,6 +745,15 @@ footer{text-align:center;padding:22px;font-size:13px;color:#66583e}
     $("ghazalPlay").addEventListener("click", playGhazal);
     $("ghazalStop").addEventListener("click", () => stopGhazal());
     $("shareTop").addEventListener("click", shareCard);
+    $("shareCard").addEventListener("click", shareCard);
+    $("adminEntry").addEventListener("click", openAdminModal);
+    $("adminLogout").addEventListener("click", adminLogout);
+    $("adminOk").addEventListener("click", submitAdmin);
+    $("adminCancel").addEventListener("click", closeAdminModal);
+    $("adminModal").addEventListener("keydown", e => {
+      if (e.key === "Enter") { e.preventDefault(); submitAdmin(); }
+      if (e.key === "Escape") closeAdminModal();
+    });
     $("editToggle").addEventListener("click", () => toggleEditor());
     $("closeEditor").addEventListener("click", () => toggleEditor(false));
     $("applySettings").addEventListener("click", applySettings);
@@ -647,7 +762,7 @@ footer{text-align:center;padding:22px;font-size:13px;color:#66583e}
 
     window.addEventListener("hashchange", () => {
       data = loadData();
-      document.body.classList.toggle("guest-mode", hasInviteLink);
+      updateModeClasses();
       render();
       setupCountdown();
     });
