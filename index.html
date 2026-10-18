@@ -1,166 +1,613 @@
-
 <!DOCTYPE html>
 <html lang="bn">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#194b3b">
 <title>Royal Islamic Wedding Invitation</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root {
-  --gold: #c49a43;
-  --green: #194b3b;
-}
-body {
-  margin: 0;
-  font-family: sans-serif;
-  background: radial-gradient(circle, #fff6df, #c8ae78);
-  color: #3b301d;
-}
-button {
-  padding: 10px 16px;
-  border: 1px solid var(--gold);
-  border-radius: 25px;
-  background: #f8e5a9;
-  cursor: pointer;
-  font-weight: bold;
-}
-.card {
-  max-width: 750px;
-  margin: 20px auto;
-  padding: 25px;
-  text-align: center;
-  background: #fffaf0;
-  border: 3px double var(--gold);
-  border-radius: 15px;
-}
-h1, h2 { color: var(--green); }
-.audio-panel {
-  margin-top: 20px;
-  padding: 15px;
-  background: #f6edda;
-  border-radius: 12px;
-}
+:root{--gold:#c49a43;--green:#194b3b;--cream:#fffaf0;--ink:#3b301d}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Hind Siliguri',sans-serif;background:radial-gradient(circle,#fff6df,#c8ae78);color:var(--ink)}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer;padding:10px 15px;border-radius:25px;border:1px solid var(--gold);background:#f8e5a9;color:#422f0e;font-weight:700}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,#gate:focus-visible{outline:3px solid #2467c7;outline-offset:2px}
+#gate:focus-visible{outline-offset:-8px}
+button:disabled{opacity:.55;cursor:not-allowed}
+header{position:sticky;top:0;z-index:20;background:#fff9e9ee;padding:12px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;border-bottom:2px solid var(--gold)}
+header .actions{display:flex;gap:7px;flex-wrap:wrap}
+.dark{background:var(--green);color:white}
+main{max-width:850px;margin:auto;padding:15px}
+#gate{position:fixed;inset:0;z-index:1000;overflow:hidden;perspective:1400px;background:radial-gradient(ellipse,#fff6d9,#bd9254);cursor:pointer;transition:opacity 1s,visibility 1s}
+#gate.hide{opacity:0;visibility:hidden;pointer-events:none}
+.arch{position:absolute;inset:3% 3% 0;border:8px solid #9c702b;border-bottom:0;border-radius:48% 48% 0 0;box-shadow:inset 0 0 0 5px #f2d78d,0 0 0 4px #68471c}
+.sign{position:absolute;z-index:5;top:9%;left:50%;transform:translateX(-50%);width:75%;text-align:center;padding:12px;background:linear-gradient(#79552c,#382313);border:3px double #e9cb7c;color:#ffedb4}
+.sign strong{font-size:clamp(25px,6vw,40px)}
+.door{position:absolute;top:0;width:50.5%;height:100%;z-index:4;border:5px ridge #e5c16a;background:repeating-linear-gradient(90deg,#3d2512,#80582c 12%,#4b3018 24%,#9a713a 40%,#422713 65%);box-shadow:inset 0 0 0 9px #c69c4b,inset 0 0 0 16px #4a2c16,inset 0 0 0 20px #e5c46f;transition:transform 2s cubic-bezier(.7,0,.2,1);transform-style:preserve-3d}
+.left{left:0;transform-origin:left center}.right{right:0;transform-origin:right center}
+#gate.open .left{transform:rotateY(-115deg)}#gate.open .right{transform:rotateY(115deg)}
+.frame{position:absolute;inset:27% 8% 5%;border:4px double #e8c879;background:linear-gradient(145deg,#79542c,#301b0d);box-shadow:inset 0 0 0 7px #c49a43;text-align:center;color:#f8d98c}
+.frame .symbol{font-size:clamp(40px,10vw,75px);margin-top:20%}.frame .pattern{font-size:25px;line-height:2}
+.handle{position:absolute;top:60%;width:17px;height:17px;background:#ffdf7b;border-radius:50%;box-shadow:0 0 0 4px #8a5a1b}
+.left .handle{right:9%}.right .handle{left:9%}
+.instruction{position:absolute;bottom:7%;left:50%;transform:translateX(-50%);white-space:nowrap;z-index:8;background:#4b2e12;color:#ffe6a1;border:1px solid #f3d48a;padding:13px 20px;border-radius:30px}
+#gate.open .sign,#gate.open .instruction{opacity:0}
+.welcome{position:absolute;z-index:2;top:45%;left:50%;transform:translate(-50%,-50%);width:80%;max-width:420px;background:#241605;color:white;border:3px double #e8c879;padding:25px;text-align:center;opacity:0;transition:opacity 1s}
+#gate.open .welcome{opacity:1}
+.arabic{font:700 30px Amiri,serif;color:#d7ad52}
+.card{background:var(--cream);border:3px double var(--gold);outline:1px solid #d2b567;outline-offset:-9px;border-radius:15px;padding:clamp(20px,5vw,42px);text-align:center;box-shadow:0 15px 45px #39270c33}
+.bismillah{font:700 34px Amiri,serif;color:var(--green)}
+.verse{line-height:1.9;color:#66583e}.ornament{color:var(--gold);letter-spacing:8px;margin:18px}
+.guest,.person,.event{background:#fffdf7;border:1px solid #e5d19a;border-radius:12px;padding:15px;margin:12px 0}
+.guest{color:var(--green);font-weight:700}
+.couple{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;margin:22px 0}
+.person h2{color:var(--green);font-size:clamp(18px,3vw,25px);overflow-wrap:anywhere}
+.role{background:var(--green);color:white;border-radius:20px;padding:3px 15px}
+.parent{font-size:14px;color:#6b5c43;line-height:1.8}.amp{font:700 30px Amiri;color:var(--gold)}
+.title{color:var(--green);font-weight:700;font-size:22px;margin-top:25px}.event{line-height:1.9}
+.dua{background:#f6edda;padding:18px;border-radius:12px;line-height:1.9;margin-top:22px}
+.editor{display:none;background:#fffaf0;padding:20px;border:2px solid var(--gold);border-radius:12px;margin:20px 0}
+.editor.show{display:block}.field{margin-bottom:12px;text-align:left}
+.field label{display:block;font-weight:700;margin-bottom:4px}
+.field input,.field textarea,.field select{width:100%;padding:10px;border:1px solid #c9ad6c;border-radius:7px;background:white}
+.field textarea{min-height:65px}.small{font-size:13px;color:#6d6049;line-height:1.7}
+.countdown{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:15px}
+.unit{background:var(--green);color:white;padding:10px;border-radius:9px;min-width:70px}.unit b{display:block;font-size:23px}
+.countdown .done{background:var(--green);color:white;padding:10px 20px;border-radius:9px;font-weight:700}
+.audio-panel{margin:18px auto 0;padding:16px;background:#f6edda;border:1px solid #d9bf7d;border-radius:12px;max-width:650px}
+.audio-panel h3{margin:0 0 8px;color:var(--green)}
+.audio-controls{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:10px 0}
+.status{font-size:13px;min-height:1.5em;color:#5b4a2c}
+#effects{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:1100}
+.petal{position:absolute;top:-25px;width:13px;height:19px;border-radius:80% 10% 80% 10%;background:#d7ad52;opacity:.75;animation:fall 7s linear infinite}
+@keyframes fall{to{transform:translateY(110vh) rotate(650deg)}}
+footer{text-align:center;padding:22px;font-size:13px;color:#66583e}
+@media(max-width:520px){header{justify-content:center}header .actions{justify-content:center}.couple{gap:5px}.person{padding:9px}.amp{font-size:22px}.instruction{font-size:14px;padding:11px 14px;white-space:normal;width:max-content;max-width:90%;text-align:center}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
-
-<section class="card">
-  <h1>بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</h1>
-  <h2>শুভ বিবাহ</h2>
-  <p id="invitationText">
-    সম্মানিত অতিথি, আমাদের শুভ বিবাহ অনুষ্ঠানে আপনাকে সাদর আমন্ত্রণ।
-    নবদম্পতির জন্য দোয়া করবেন।
-  </p>
-
-  <div class="audio-panel">
-    <h2>🎙️ কণ্ঠে আমন্ত্রণ</h2>
-    <button id="voiceButton">🔊 আমন্ত্রণ শুনুন</button>
-    <button id="voiceStop">■ ভয়েস বন্ধ</button>
-    <p id="voiceStatus"></p>
+<header>
+  <strong>বিয়ের আমন্ত্রণপত্র</strong>
+  <div class="actions">
+    <button type="button" id="voiceTop">🔊 আমন্ত্রণ শুনুন</button>
+    <button type="button" id="ghazalTop" class="dark">▶ গজল</button>
+    <button type="button" id="editToggle">⚙ সম্পাদনা</button>
   </div>
+</header>
 
-  <div class="audio-panel">
-    <h2>🎵 গজল শুনুন</h2>
-    <button id="ghazalButton">▶ গজল চালু করুন</button>
-    <button id="ghazalStop">■ গজল বন্ধ</button>
-    <p id="ghazalStatus"></p>
-  </div>
+<section id="gate" role="button" tabindex="0" aria-label="বিয়ের কার্ড খুলুন">
+  <div class="arch"></div>
+  <div class="sign"><strong>بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</strong><div>বিয়ের শুভ আমন্ত্রণ</div></div>
+  <div class="frame"><div class="symbol">☪</div><div class="pattern">✦ ❖ ✦ ❖ ✦</div><p>আপনাকে সাদর আমন্ত্রণ</p></div>
+  <div class="welcome"><div class="arabic">أهلاً وسهلاً</div><h2>বিয়ের আমন্ত্রণ</h2><p>কার্ডটি দেখতে দরজায় স্পর্শ করুন</p></div>
+  <div class="door left"><span class="handle"></span></div><div class="door right"><span class="handle"></span></div>
+  <div class="instruction">✦ আমন্ত্রণপত্র খুলতে এখানে স্পর্শ করুন ✦</div>
 </section>
 
-<audio id="voiceAudio" preload="none"></audio>
-<audio id="ghazalAudio" preload="none" loop></audio>
+<main>
+  <section class="card" id="invitation">
+    <div class="bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+    <p class="verse">পরম করুণাময় ও অসীম দয়ালু আল্লাহর নামে</p>
+    <div class="ornament">✦ ❖ ✦ ❖ ✦</div>
+    <div class="guest" id="guestText">সম্মানিত অতিথি, আপনাকে আমাদের শুভ বিবাহ অনুষ্ঠানে সাদর আমন্ত্রণ।</div>
+    <div class="title">শুভ বিবাহ</div>
+    <div class="couple">
+      <div class="person"><span class="role">বর</span><h2 id="groomName">বরের নাম</h2><div class="parent" id="groomFamily">পিতা-মাতার নাম</div></div>
+      <div class="amp">&amp;</div>
+      <div class="person"><span class="role">কনে</span><h2 id="brideName">কনের নাম</h2><div class="parent" id="brideFamily">পিতা-মাতার নাম</div></div>
+    </div>
+    <div class="title">অনুষ্ঠানের বিবরণ</div>
+    <div class="event">
+      <div><strong>তারিখ ও সময়:</strong> <span id="eventDate">তারিখ ও সময়</span></div>
+      <div><strong>স্থান:</strong> <span id="eventVenue">অনুষ্ঠানের স্থান</span></div>
+    </div>
+    <div class="countdown" id="countdown" aria-live="polite"></div>
+    <div class="dua" id="messageText">আপনাদের উপস্থিতি আমাদের আনন্দকে পূর্ণতা দেবে। নবদম্পতির জন্য দোয়া করবেন।</div>
+    <div class="audio-panel">
+      <h3>🎙️ কণ্ঠে আমন্ত্রণ</h3>
+      <p class="small">‘আমন্ত্রণ শুনুন’ চাপ দিলে পুরো কার্ডের লেখা পড়ে শোনানোর চেষ্টা করবে। আরও স্বাভাবিক, বলিষ্ঠ পুরুষ কণ্ঠের জন্য সম্পাদনা অংশে তৈরি করা MP3 ভয়েসের সরাসরি URL দিন।</p>
+      <div class="audio-controls">
+        <button type="button" id="voicePlay">🔊 আমন্ত্রণ শুনুন</button>
+        <button type="button" id="voiceStop">■ ভয়েস বন্ধ</button>
+      </div>
+      <div class="status" id="voiceStatus" role="status"></div>
+    </div>
+    <div class="audio-panel">
+      <h3>🎵 গজল শুনুন</h3>
+      <p class="small">নিচের বাটনে চাপ দিলে গজল চালু হবে। আবার চাপ দিলে বন্ধ হবে।</p>
+      <div class="audio-controls">
+        <button type="button" id="ghazalPlay" class="dark">▶ গজল চালু করুন</button>
+        <button type="button" id="ghazalStop">■ গজল বন্ধ</button>
+      </div>
+      <div class="status" id="ghazalStatus" role="status"></div>
+    </div>
+  </section>
+
+  <section class="editor" id="editor">
+    <h2>কার্ড সম্পাদনা ও অডিও সেটিংস</h2>
+    <p class="small">এখানে পরিবর্তন করলে এই ব্রাউজারের বর্তমান কার্ডে প্রয়োগ হবে এবং এই ব্রাউজারে সংরক্ষিত থাকবে। শেয়ার করা লিংকে পরিবর্তন রাখতে হলে কার্ডের লিংক/কোড আবার প্রকাশ করতে হতে পারে।</p>
+    <div class="field"><label for="groomInput">বরের নাম</label><input id="groomInput"></div>
+    <div class="field"><label for="groomFatherInput">বরের পিতার নাম</label><input id="groomFatherInput"></div>
+    <div class="field"><label for="brideInput">কনের নাম</label><input id="brideInput"></div>
+    <div class="field"><label for="brideFatherInput">কনের পিতার নাম</label><input id="brideFatherInput"></div>
+    <div class="field"><label for="guestInput">অতিথির জন্য সম্বোধন</label><textarea id="guestInput"></textarea></div>
+    <div class="field"><label for="dateInput">তারিখ ও সময়ের লেখা</label><input id="dateInput"></div>
+    <div class="field">
+      <label for="eventInput">কাউন্টডাউনের জন্য অনুষ্ঠানের তারিখ ও সময় (ঐচ্ছিক)</label>
+      <input id="eventInput" type="datetime-local">
+      <div class="small">এটি দিলে কার্ডে অনুষ্ঠানের বাকি সময় গুনতে থাকবে।</div>
+    </div>
+    <div class="field"><label for="venueInput">অনুষ্ঠানের স্থান</label><textarea id="venueInput"></textarea></div>
+    <div class="field"><label for="messageInput">আমন্ত্রণ বার্তা</label><textarea id="messageInput"></textarea></div>
+    <hr>
+    <div class="field">
+      <label for="voiceTypeInput">ব্রাউজারের কণ্ঠের ধরন (MP3 না দিলে)</label>
+      <select id="voiceTypeInput">
+        <option value="auto">স্বয়ংক্রিয় (সবচেয়ে মিষ্টি ও স্পষ্ট কণ্ঠ)</option>
+        <option value="male">তরুণ পুরুষ কণ্ঠ</option>
+        <option value="female">তরুণী কণ্ঠ</option>
+      </select>
+      <div class="small">ফোন/ব্রাউজারে যে বাংলা কণ্ঠ আছে তার মধ্যে সেরাটি বেছে নেওয়া হবে।</div>
+    </div>
+    <div class="field">
+      <label for="voiceUrlInput">বলিষ্ঠ পুরুষ কণ্ঠের MP3-এর সরাসরি HTTPS URL (ঐচ্ছিক)</label>
+      <input id="voiceUrlInput" type="text" inputmode="url" placeholder="https://example.com/invitation-voice.mp3 অথবা invitation-voice.mp3">
+      <div class="small">সরাসরি অডিও ফাইলের লিংক দিতে হবে; সাধারণ শেয়ার পেজের লিংক নয়। লিংকটি সবার জন্য উন্মুক্ত হতে হবে। ফাইলটি এই পেজের পাশেই আপলোড করা থাকলে শুধু ফাইলের নাম লিখলেও চলবে।</div>
+    </div>
+    <div class="field">
+      <label for="ghazalUrlInput">গজলের MP3-এর সরাসরি HTTPS URL</label>
+      <input id="ghazalUrlInput" type="text" inputmode="url" placeholder="https://example.com/ghazal.mp3 অথবা ghazal.mp3">
+      <div class="small">YouTube/Whyp-এর সাধারণ ওয়েবপেজ লিংক সরাসরি অডিও হিসেবে কাজ নাও করতে পারে।</div>
+    </div>
+    <div class="audio-controls">
+      <button type="button" id="applySettings" class="dark">পরিবর্তন প্রয়োগ</button>
+      <button type="button" id="testVoice">ভয়েস পরীক্ষা</button>
+      <button type="button" id="testGhazal">গজল পরীক্ষা</button>
+      <button type="button" id="closeEditor">বন্ধ করুন</button>
+    </div>
+    <p class="small">নোট: ব্রাউজারের বাংলা Text-to-Speech কণ্ঠ ফোনভেদে আলাদা হতে পারে। নির্দিষ্ট পুরুষ কণ্ঠ পেতে আগে তৈরি করা MP3 URL ব্যবহার করুন।</p>
+  </section>
+</main>
+<footer>আল্লাহ নবদম্পতির জীবনে বরকত দান করুন। আমিন।</footer>
+<div id="effects" aria-hidden="true"></div>
+<audio id="voiceAudio" preload="none" playsinline></audio>
+<audio id="ghazalAudio" preload="none" playsinline loop></audio>
 
 <script>
-const voiceAudio = document.getElementById("voiceAudio");
-const ghazalAudio = document.getElementById("ghazalAudio");
-const voiceStatus = document.getElementById("voiceStatus");
-const ghazalStatus = document.getElementById("ghazalStatus");
+(() => {
+  "use strict";
+  const $ = id => document.getElementById(id);
+  const STORE_KEY = "royalInviteSaved_v1";
+  const defaults = {
+    groom:"বরের নাম", groomFather:"বরের পিতার নাম", bride:"কনের নাম",
+    brideFather:"কনের পিতার নাম",
+    guest:"সম্মানিত অতিথি, আপনাকে আমাদের শুভ বিবাহ অনুষ্ঠানে সাদর আমন্ত্রণ।",
+    date:"তারিখ ও সময়", venue:"অনুষ্ঠানের স্থান",
+    message:"আপনাদের উপস্থিতি আমাদের আনন্দকে পূর্ণতা দেবে। নবদম্পতির জন্য দোয়া করবেন।",
+    voice:"", ghazal:"", event:"", voiceType:"auto"
+  };
+  let hasInviteLink = false;
+  let data = {...defaults};
+  let countdownTimer = null;
+  let speakId = 0;
+  let speaking = false;
+  let petalTimer = null;
 
-// এখানে সরাসরি MP3 ফাইলের URL বসাও।
-const VOICE_URL = "";
-const GHAZAL_URL = "";
-
-function stopVoice() {
-  speechSynthesis.cancel();
-  voiceAudio.pause();
-  voiceAudio.currentTime = 0;
-}
-
-function stopGhazal() {
-  ghazalAudio.pause();
-  ghazalAudio.currentTime = 0;
-  document.getElementById("ghazalButton").textContent =
-    "▶ গজল চালু করুন";
-}
-
-document.getElementById("voiceButton").onclick = async () => {
-  stopGhazal();
-  stopVoice();
-
-  if (VOICE_URL.trim()) {
-    voiceAudio.src = VOICE_URL;
+  /* ---------- Invite link data (#invite=<base64 JSON>) : একবারই ডিকোড হয় ---------- */
+  function readHash() {
+    const match = (location.hash || "").match(/(?:^#|&)invite=([^&]+)/);
+    if (!match) return null;
     try {
-      await voiceAudio.play();
-      voiceStatus.textContent = "আমন্ত্রণ চলছে...";
-    } catch (e) {
-      voiceStatus.textContent =
-        "ভয়েস URL পরীক্ষা করুন।";
+      let raw = decodeURIComponent(match[1]).replace(/-/g, "+").replace(/_/g, "/");
+      while (raw.length % 4) raw += "=";
+      const bytes = Uint8Array.from(atob(raw), c => c.charCodeAt(0));
+      const obj = JSON.parse(new TextDecoder("utf-8").decode(bytes));
+      return obj && typeof obj === "object" ? obj : null;
+    } catch (err) {
+      console.warn("Invite data could not be decoded:", err);
+      return null;
     }
-    return;
   }
 
-  if (!("speechSynthesis" in window)) {
-    voiceStatus.textContent =
-      "এই ব্রাউজারে Text-to-Speech নেই।";
-    return;
+  function loadData() {
+    const obj = readHash();
+    hasInviteLink = !!obj;
+    if (obj) {
+      return {
+        ...defaults,
+        groom: obj.groom || defaults.groom,
+        groomFather: obj.gfather || defaults.groomFather,
+        bride: obj.bride || defaults.bride,
+        brideFather: obj.bfather || defaults.brideFather,
+        guest: obj.guest || defaults.guest,
+        date: obj.date || defaults.date,
+        venue: obj.venue || defaults.venue,
+        message: obj.message || defaults.message,
+        ghazal: obj.music || "",
+        voice: obj.voice || "",
+        event: obj.event || ""
+      };
+    }
+    try {
+      const saved = JSON.parse(localStorage.getItem(STORE_KEY) || "null");
+      if (saved && typeof saved === "object") {
+        const out = {...defaults};
+        Object.keys(defaults).forEach(k => { if (typeof saved[k] === "string") out[k] = saved[k]; });
+        return out;
+      }
+    } catch (_) {}
+    return {...defaults};
   }
 
-  const text = document.getElementById("invitationText").innerText;
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = "bn-BD";
-  utterance.rate = 0.88;
-  utterance.pitch = 0.82;
-
-  utterance.onstart = () => {
-    voiceStatus.textContent = "আমন্ত্রণ পড়া হচ্ছে...";
-  };
-  utterance.onend = () => {
-    voiceStatus.textContent = "আমন্ত্রণ শেষ।";
-  };
-
-  speechSynthesis.speak(utterance);
-};
-
-document.getElementById("voiceStop").onclick = stopVoice;
-
-document.getElementById("ghazalButton").onclick = async () => {
-  stopVoice();
-
-  if (!GHAZAL_URL.trim()) {
-    ghazalStatus.textContent =
-      "কোডে GHAZAL_URL বসাতে হবে।";
-    return;
+  function saveData() {
+    if (hasInviteLink) return; // শেয়ার করা লিংকের তথ্য কখনও ওভাররাইট হবে না
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(data)); } catch (_) {}
   }
 
-  if (!ghazalAudio.paused) {
-    stopGhazal();
-    return;
+  /* ---------- Render ---------- */
+  function setText(id, value) { $(id).textContent = value || ""; }
+  function render() {
+    setText("groomName", data.groom);
+    setText("groomFamily", data.groomFather ? "পিতা: " + data.groomFather : "");
+    setText("brideName", data.bride);
+    setText("brideFamily", data.brideFather ? "পিতা: " + data.brideFather : "");
+    setText("guestText", data.guest);
+    setText("eventDate", data.date);
+    setText("eventVenue", data.venue);
+    setText("messageText", data.message);
+    $("groomInput").value = data.groom;
+    $("groomFatherInput").value = data.groomFather;
+    $("brideInput").value = data.bride;
+    $("brideFatherInput").value = data.brideFather;
+    $("guestInput").value = data.guest;
+    $("dateInput").value = data.date;
+    $("venueInput").value = data.venue;
+    $("messageInput").value = data.message;
+    $("voiceUrlInput").value = data.voice || "";
+    $("ghazalUrlInput").value = data.ghazal || "";
+    $("voiceTypeInput").value = data.voiceType || "auto";
+    const m = String(data.event || "").match(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/);
+    $("eventInput").value = m ? m[0] : "";
   }
 
-  ghazalAudio.src = GHAZAL_URL;
-  try {
-    await ghazalAudio.play();
-    ghazalStatus.textContent = "গজল চলছে...";
-    document.getElementById("ghazalButton").textContent =
-      "Ⅱ গজল থামান";
-  } catch (e) {
-    ghazalStatus.textContent =
-      "গজল চালু হয়নি। সরাসরি MP3 URL পরীক্ষা করুন।";
+  /* ---------- অডিও URL যাচাই ---------- */
+  function resolveAudioUrl(url) {
+    url = (url || "").trim();
+    if (!url) return {empty:true};
+    if (/^https:\/\//i.test(url)) return {url};
+    if (/^[a-z][a-z0-9+.-]*:/i.test(url) || url.startsWith("//")) return {bad:true};
+    if (/\.(mp3|m4a|aac|ogg|oga|wav|webm)(\?.*)?$/i.test(url)) {
+      try { return {url:new URL(url, location.href).href}; } catch (_) {}
+    }
+    return {bad:true};
   }
-};
 
-document.getElementById("ghazalStop").onclick = stopGhazal;
+  /* ---------- ভয়েস: পুরো কার্ডের লেখা ---------- */
+  function fullInvitationText() {
+    return [
+      "বিসমিল্লাহির রাহমানির রাহিম।",
+      "পরম করুণাময় ও অসীম দয়ালু আল্লাহর নামে।",
+      data.guest,
+      "শুভ বিবাহ।",
+      "বরের নাম: " + data.groom + "।",
+      data.groomFather ? "বরের পিতার নাম: " + data.groomFather + "।" : "",
+      "কনের নাম: " + data.bride + "।",
+      data.brideFather ? "কনের পিতার নাম: " + data.brideFather + "।" : "",
+      "অনুষ্ঠানের তারিখ ও সময়: " + data.date + "।",
+      "অনুষ্ঠানের স্থান: " + data.venue + "।",
+      data.message,
+      "আপনাদের উপস্থিতি একান্তভাবে কাম্য। নবদম্পতির জন্য দোয়া করবেন।",
+      "আল্লাহ নবদম্পতির জীবনে বরকত দান করুন। আমিন।"
+    ].filter(Boolean).join(" ");
+  }
+
+  // লম্বা লেখা ছোট ছোট বাক্যে ভাগ করা (Chrome/Android-এ লম্বা লেখা মাঝপথে থেমে যায়)
+  function splitChunks(text) {
+    const parts = text.match(/[^।.!?]+[।.!?]*/g) || [text];
+    const out = [];
+    parts.forEach(p => {
+      p = p.trim();
+      if (!p) return;
+      while (p.length > 170) {
+        let cut = p.lastIndexOf(",", 170);
+        if (cut < 60) cut = p.lastIndexOf(" ", 170);
+        if (cut < 60) cut = 170;
+        out.push(p.slice(0, cut + 1).trim());
+        p = p.slice(cut + 1).trim();
+      }
+      if (p) out.push(p);
+    });
+    return out;
+  }
+
+  function banglaVoices() {
+    if (!("speechSynthesis" in window)) return [];
+    return window.speechSynthesis.getVoices().filter(v => /^bn/i.test(v.lang) || /bangla|bengali|বাংলা/i.test(v.name));
+  }
+  function getVoicesReady() {
+    return new Promise(resolve => {
+      if (banglaVoices().length) return resolve(banglaVoices());
+      let done = false;
+      const finish = () => { if (done) return; done = true; resolve(banglaVoices()); };
+      window.speechSynthesis.addEventListener("voiceschanged", finish, {once:true});
+      setTimeout(finish, 900);
+    });
+  }
+  // সেরা কণ্ঠ বাছাই: Natural/Neural/Online কণ্ঠ সবচেয়ে মিষ্টি ও তরুণ শোনায়
+  function pickVoice(list, kind) {
+    const male = /pradeep|bashkar|bhaskar|\bmale\b|\bman\b/i;
+    const female = /nabanita|tanishaa|tanisha|\bfemale\b|woman/i;
+    let best = null, bestScore = -1e9;
+    list.forEach(v => {
+      let s = 0;
+      const n = v.name || "";
+      if (/natural|neural|online/i.test(n)) s += 6;
+      if (/google/i.test(n)) s += 3;
+      if (/bn-bd/i.test(v.lang)) s += 2;
+      if (v.localService === false) s += 1;
+      if (kind === "male") { if (male.test(n)) s += 12; if (female.test(n)) s -= 12; }
+      if (kind === "female") { if (female.test(n)) s += 12; if (male.test(n)) s -= 12; }
+      if (s > bestScore) { bestScore = s; best = v; }
+    });
+    return best;
+  }
+
+  function stopSpeech() {
+    speakId++;
+    speaking = false;
+    if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+  }
+  function stopVoice(silent) {
+    const wasPlaying = speaking || !$("voiceAudio").paused;
+    stopSpeech();
+    $("voiceAudio").pause();
+    try { $("voiceAudio").currentTime = 0; } catch (_) {}
+    if (!silent || wasPlaying) $("voiceStatus").textContent = silent ? "" : "ভয়েস বন্ধ করা হয়েছে।";
+  }
+  function stopGhazal(silent) {
+    const wasPlaying = !$("ghazalAudio").paused;
+    $("ghazalAudio").pause();
+    try { $("ghazalAudio").currentTime = 0; } catch (_) {}
+    if (!silent || wasPlaying) $("ghazalStatus").textContent = silent ? "" : "গজল বন্ধ করা হয়েছে।";
+    $("ghazalPlay").textContent = "▶ গজল চালু করুন";
+    $("ghazalTop").textContent = "▶ গজল";
+  }
+
+  async function playVoice() {
+    stopGhazal(true);
+    stopSpeech();
+    const res = resolveAudioUrl(data.voice);
+    if (res.bad) {
+      $("voiceStatus").textContent = "ভয়েস URL অবশ্যই https:// দিয়ে শুরু হতে হবে (অথবা একই ফোল্ডারের MP3 ফাইলের নাম দিন)।";
+      return;
+    }
+    if (res.url) {
+      const audio = $("voiceAudio");
+      audio.src = res.url;
+      audio.onended = () => $("voiceStatus").textContent = "আমন্ত্রণবার্তা শেষ।";
+      audio.onerror = () => $("voiceStatus").textContent = "ভয়েস ফাইল চালানো যায়নি। সরাসরি MP3 URL এবং ফাইলের অনুমতি পরীক্ষা করুন।";
+      try {
+        await audio.play();
+        $("voiceStatus").textContent = "আমন্ত্রণবার্তা চলছে…";
+      } catch (e) {
+        $("voiceStatus").textContent = "ভয়েস চালু হয়নি। আবার বাটনে চাপ দিন অথবা অডিও URL পরীক্ষা করুন।";
+      }
+      return;
+    }
+    if (!("speechSynthesis" in window) || !("SpeechSynthesisUtterance" in window)) {
+      $("voiceStatus").textContent = "এই ব্রাউজারে Text-to-Speech নেই। সম্পাদনা অংশে MP3 ভয়েসের URL দিন।";
+      return;
+    }
+    const myId = ++speakId;
+    $("voiceStatus").textContent = "কণ্ঠ প্রস্তুত হচ্ছে…";
+    const list = await getVoicesReady();
+    if (myId !== speakId) return;
+    const kind = data.voiceType || "auto";
+    const voice = pickVoice(list, kind);
+    const chunks = splitChunks(fullInvitationText());
+    // তরুণ, মিষ্টি ও স্পষ্ট শোনানোর জন্য স্বাভাবিকের কাছাকাছি গতি ও পিচ
+    const pitch = kind === "male" ? 1.0 : (kind === "female" ? 1.12 : 1.06);
+    const rate = 0.94;
+    let i = 0;
+    const next = () => {
+      if (myId !== speakId) return;
+      if (i >= chunks.length) {
+        speaking = false;
+        $("voiceStatus").textContent = "আমন্ত্রণবার্তা শেষ।";
+        return;
+      }
+      const u = new SpeechSynthesisUtterance(chunks[i++]);
+      u.lang = voice ? voice.lang : "bn-BD";
+      if (voice) u.voice = voice;
+      u.rate = rate;
+      u.pitch = pitch;
+      u.volume = 1;
+      u.onend = next;
+      u.onerror = ev => {
+        if (myId !== speakId) return;
+        if (ev && (ev.error === "canceled" || ev.error === "interrupted")) return;
+        speaking = false;
+        $("voiceStatus").textContent = "ব্রাউজারের কণ্ঠ কাজ করেনি। নির্ভরযোগ্য ফলের জন্য MP3 ভয়েস URL দিন।";
+      };
+      window.speechSynthesis.speak(u);
+    };
+    speaking = true;
+    $("voiceStatus").textContent = voice
+      ? "আমন্ত্রণ পড়া হচ্ছে… (" + voice.name + ")"
+      : "ব্রাউজারের কণ্ঠে আমন্ত্রণ পড়া হচ্ছে… (এই ডিভাইসে বাংলা কণ্ঠ পাওয়া যায়নি, MP3 ভয়েস দিন)";
+    setTimeout(next, 120);
+  }
+
+  async function playGhazal() {
+    stopVoice(true);
+    const res = resolveAudioUrl(data.ghazal);
+    if (res.empty) {
+      $("ghazalStatus").textContent = "এখনো গজলের সরাসরি HTTPS অডিও URL দেওয়া হয়নি। ⚙ সম্পাদনা থেকে URL দিন।";
+      $("editor").classList.add("show");
+      $("editor").scrollIntoView({behavior:"smooth", block:"start"});
+      return;
+    }
+    if (res.bad) {
+      $("ghazalStatus").textContent = "গজলের URL অবশ্যই https:// দিয়ে শুরু হতে হবে (অথবা একই ফোল্ডারের MP3 ফাইলের নাম দিন)।";
+      return;
+    }
+    const audio = $("ghazalAudio");
+    if (audio.src === res.url && !audio.paused) {
+      stopGhazal();
+      return;
+    }
+    audio.src = res.url;
+    audio.onerror = () => {
+      $("ghazalStatus").textContent = "গজল চালানো যায়নি। URL-টি সরাসরি অডিও ফাইল কি না এবং ফাইলটি পাবলিক কি না পরীক্ষা করুন।";
+      $("ghazalPlay").textContent = "▶ গজল চালু করুন";
+      $("ghazalTop").textContent = "▶ গজল";
+    };
+    try {
+      await audio.play();
+      $("ghazalStatus").textContent = "গজল চলছে… আবার বাটনে চাপ দিলে থামবে।";
+      $("ghazalPlay").textContent = "Ⅱ গজল থামান";
+      $("ghazalTop").textContent = "Ⅱ গজল থামান";
+    } catch (e) {
+      $("ghazalStatus").textContent = "গজল চালু হয়নি। সরাসরি MP3 URL এবং ফাইলের অনুমতি পরীক্ষা করুন।";
+    }
+  }
+
+  /* ---------- সেটিংস ---------- */
+  function applySettings() {
+    data.groom = $("groomInput").value.trim() || defaults.groom;
+    data.groomFather = $("groomFatherInput").value.trim();
+    data.bride = $("brideInput").value.trim() || defaults.bride;
+    data.brideFather = $("brideFatherInput").value.trim();
+    data.guest = $("guestInput").value.trim() || defaults.guest;
+    data.date = $("dateInput").value.trim() || defaults.date;
+    data.event = $("eventInput").value.trim();
+    data.venue = $("venueInput").value.trim() || defaults.venue;
+    data.message = $("messageInput").value.trim() || defaults.message;
+    data.voiceType = $("voiceTypeInput").value || "auto";
+    data.voice = $("voiceUrlInput").value.trim();
+    data.ghazal = $("ghazalUrlInput").value.trim();
+    render();
+    setupCountdown();
+    saveData();
+    $("voiceStatus").textContent = "সেটিংস এই পেজে প্রয়োগ করা হয়েছে।";
+    $("ghazalStatus").textContent = "সেটিংস এই পেজে প্রয়োগ করা হয়েছে।";
+  }
+
+  function toggleEditor(force) {
+    const el = $("editor");
+    const show = typeof force === "boolean" ? force : !el.classList.contains("show");
+    el.classList.toggle("show", show);
+    if (show) el.scrollIntoView({behavior:"smooth", block:"start"});
+  }
+
+  /* ---------- কাউন্টডাউন ---------- */
+  const bn = n => String(n).replace(/\d/g, d => "০১২৩৪৫৬৭৮৯"[d]);
+  function setupCountdown() {
+    const container = $("countdown");
+    clearInterval(countdownTimer);
+    container.replaceChildren();
+    const target = data.event ? new Date(data.event) : null;
+    if (!target || isNaN(target.getTime())) return;
+    const labels = ["দিন", "ঘণ্টা", "মিনিট", "সেকেন্ড"];
+    const nums = labels.map(label => {
+      const unit = document.createElement("div");
+      unit.className = "unit";
+      const b = document.createElement("b");
+      b.textContent = "০";
+      unit.append(b, document.createTextNode(label));
+      container.appendChild(unit);
+      return b;
+    });
+    const tick = () => {
+      const diff = target.getTime() - Date.now();
+      if (diff <= 0) {
+        clearInterval(countdownTimer);
+        container.replaceChildren();
+        const done = document.createElement("div");
+        done.className = "done";
+        done.textContent = "✦ শুভ দিন এসে গেছে ✦";
+        container.appendChild(done);
+        return;
+      }
+      const s = Math.floor(diff / 1000);
+      const vals = [Math.floor(s / 86400), Math.floor(s % 86400 / 3600), Math.floor(s % 3600 / 60), s % 60];
+      vals.forEach((v, idx) => { nums[idx].textContent = bn(v); });
+    };
+    tick();
+    countdownTimer = setInterval(tick, 1000);
+  }
+
+  /* ---------- দরজা ও পাপড়ি ---------- */
+  function startPetals() {
+    const box = $("effects");
+    if (box.childElementCount) return;
+    const colors = ["#d7ad52", "#e8c879", "#c49a43", "#f3d48a"];
+    for (let i = 0; i < 16; i++) {
+      const p = document.createElement("span");
+      p.className = "petal";
+      p.style.left = Math.random() * 100 + "%";
+      p.style.animationDuration = (6 + Math.random() * 5).toFixed(1) + "s";
+      p.style.animationDelay = (Math.random() * 6).toFixed(1) + "s";
+      p.style.background = colors[i % colors.length];
+      const size = 0.7 + Math.random() * 0.7;
+      p.style.width = (13 * size).toFixed(1) + "px";
+      p.style.height = (19 * size).toFixed(1) + "px";
+      box.appendChild(p);
+    }
+    petalTimer = setTimeout(() => box.replaceChildren(), 30000);
+  }
+  function openGate() {
+    const gate = $("gate");
+    if (gate.classList.contains("open")) return;
+    gate.classList.add("open");
+    startPetals();
+    setTimeout(() => {
+      gate.classList.add("hide");
+      gate.setAttribute("aria-hidden", "true");
+      gate.tabIndex = -1;
+      document.body.style.overflow = "";
+    }, 2600);
+  }
+
+  /* ---------- শুরু ---------- */
+  function init() {
+    data = loadData();
+    render();
+    setupCountdown();
+    document.body.style.overflow = "hidden";
+
+    const gate = $("gate");
+    gate.addEventListener("click", openGate);
+    gate.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openGate(); }
+    });
+
+    $("voiceTop").addEventListener("click", playVoice);
+    $("voicePlay").addEventListener("click", playVoice);
+    $("voiceStop").addEventListener("click", () => stopVoice());
+    $("ghazalTop").addEventListener("click", playGhazal);
+    $("ghazalPlay").addEventListener("click", playGhazal);
+    $("ghazalStop").addEventListener("click", () => stopGhazal());
+    $("editToggle").addEventListener("click", () => toggleEditor());
+    $("closeEditor").addEventListener("click", () => toggleEditor(false));
+    $("applySettings").addEventListener("click", applySettings);
+    $("testVoice").addEventListener("click", () => { applySettings(); playVoice(); });
+    $("testGhazal").addEventListener("click", () => { applySettings(); playGhazal(); });
+
+    window.addEventListener("hashchange", () => {
+      data = loadData();
+      render();
+      setupCountdown();
+    });
+    window.addEventListener("pagehide", () => { stopSpeech(); clearInterval(countdownTimer); clearTimeout(petalTimer); });
+    if ("speechSynthesis" in window) window.speechSynthesis.getVoices();
+  }
+
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+  else init();
+})();
 </script>
-
 </body>
 </html>
